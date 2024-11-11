@@ -8,10 +8,8 @@ import Transaction from '../database/models/transaction.model';
 import { updateCredits } from './user.actions';
 
 export async function checkoutCredits(transaction: CheckoutTransactionParams) {
-  // WITH THE ! WE ARE SAYING THAT WE KNOW THAT IT ACTUALLY EXISTS AND THAT TS DOESN'T HAVE TO WORRY ABOUT IT
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!); 
 
-  // WE CONVERT IT TO A NUMBER
   const amount = Number(transaction.amount) * 100;
 
   const session = await stripe.checkout.sessions.create({
@@ -44,7 +42,6 @@ export async function createTransaction(transaction: CreateTransactionParams) {
   try {
     await connectToDatabase();
 
-    // Create a new transaction with a buyerId
     const newTransaction = await Transaction.create({
       ...transaction, 
       buyer: transaction.buyerId
