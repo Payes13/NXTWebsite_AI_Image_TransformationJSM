@@ -7,7 +7,6 @@ interface MongooseConnection {
   promise: Promise<Mongoose> | null;
 }
 
-// global IS COMING FROM THE GLOBAL SCOPE
 let cached: MongooseConnection = (global as any).mongoose
 
 if(!cached) {
