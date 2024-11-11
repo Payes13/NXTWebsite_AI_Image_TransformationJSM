@@ -9,10 +9,6 @@ import { getImageById } from "@/lib/actions/image.actions";
 import { getImageSize } from "@/lib/utils";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 
-// localhost:3000/transformations/[id]/page.tsx
-// localhost:3000/transformations/123
-// THIS IS THE id COMING FROM THE URL { params: { id } }
-// THIS WILL BE THE route FOR THE GET REQUEST
 const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
   const { userId } = auth();
 
@@ -63,7 +59,6 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
 
       <section className="mt-10 border-t border-dark-400/15">
         <div className="transformation-grid">
-          {/* MEDIA UPLOADER */}
           <div className="flex flex-col gap-4">
             <h3 className="h3-bold text-dark-600">Original</h3>
 
