@@ -45,10 +45,8 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
   const [image, setImage] = useState(data)
   const [newTransformation, setNewTransformation] = useState<Transformations | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // ARE WE CURRENTLY DOING SOMETHING TO THE image
   const [isTransforming, setIsTransforming] = useState(false);
   const [transformationConfig, setTransformationConfig] = useState(config)
-  // useTransition() LETS YOU UPDATE THE state WITHOUT BLOCKING THE UI
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
   const { toast } = useToast()
@@ -94,7 +92,6 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         color: values.color,
       }
 
-      // ADD image FOR THE FIRST TIME
       if(action === 'Add') {
         try {
           const newImage = await addImage({
@@ -161,9 +158,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     debounce(() => {
       setNewTransformation((prevState: any) => ({
         ...prevState,
-        // IN THIS CASE EITHER recolor OR remove
         [type]: {
-          // WE spread ALL THE PROPERTIES THAT THIS type HAS
           ...prevState?.[type],
           [fieldName === 'prompt' ? 'prompt' : 'to' ]: value 
         }
@@ -195,7 +190,6 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
   }
 
   useEffect(() => {
-    // FOR THESE types WE CAN IMMEDIATELY ENABLE THE APPLY TRANSFORMATION BTN AS SOON AS WE UPLOAD THE IMAGE BC THEY ONLY HAVE ONE FIELD IN THE form
     if(image && (type === 'restore' || type === 'removeBackground')) {
       setNewTransformation(transformationType.config)
     }
@@ -204,15 +198,12 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* IT RETURNS THE ABSOLUTE VALUE EX. -5 = 5   */}
         {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <CustomField 
           control={form.control}
           name="title"
           formLabel="Image Title"
           className="w-full"
-          // WE DESTRUCTURE THE field FROM THE VALUES WE ARE GETTING, WE GET ACCESS TO THE field
-          // WE spread ALL OF THE props COMING FROM THE field
           render={({ field }) => <Input {...field} className="input-field" />}
         />
 
@@ -225,7 +216,6 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
             render={({ field }) => (
               <Select
                 onValueChange={(value) => onSelectFieldHandler(value, field.onChange)}
-                // WE ADD THE value prop SO WE KNOW WHEN THE value HAS CHANGED. IF WE DON'T ADD IT, WHEN WE DO A MODIFICATION ON THIS FEATURE, IT WON'T APPLY TRANSFORMATION BC DOESN'T RECOGNIZE THAT WE CHANGED THE size OF THE image
                 value={field.value}
               >
                 <SelectTrigger className="select-field">
@@ -290,7 +280,6 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
           </div>
         )}
 
-        {/* WE PUT THE MediaUploader inside our CustomField so we can immediately get its data within our form */}
         <div className="media-uploader-field">
           <CustomField 
             control={form.control}
