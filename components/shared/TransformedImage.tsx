@@ -58,14 +58,11 @@ const TransformedImage = ({ image, type, title, transformationConfig, isTransfor
             onError={() => {
               debounce(() => {
                 setIsTransforming && setIsTransforming(false);
-                // IF ANYTHING HAPPENS AFTER 8 sec, THEN WE CAN ASSUME THAT AN ERROR OCURRED
               }, 8000)() // debounce CALLS ITSELF
             }}
-            // IT CONTAINS ALL OF THE IMAGE TRANSFORMATIONS THAT WE WANT TO APPLY TO THAT IMAGE
             {...transformationConfig}
           />
 
-          {/* WHILE WE ARE TRANSFORMING... */}
           {isTransforming && (
             <div className="transforming-loader">
               <Image 
