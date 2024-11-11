@@ -7,8 +7,6 @@ import { transformationTypes } from "@/constants";
 import { getUserById } from "@/lib/actions/user.actions";
 import { getImageById } from "@/lib/actions/image.actions";
 
-// localhost:3000/transformations/[id]/update/page.tsx
-// localhost:3000/transformations/123/update
 const Page = async ({ params: { id } }: SearchParamProps) => {
   const { userId } = auth();
 
