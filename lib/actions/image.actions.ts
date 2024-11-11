@@ -1,5 +1,3 @@
-// HERE WE CALL Cloudinary APIs
-
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -11,8 +9,6 @@ import { redirect } from "next/navigation";
 
 import { v2 as cloudinary } from 'cloudinary'
 
-// DATA ABOUT THE user THAT CREATED THE img
-// DOESN'T EXPLAIN WHERE .populate() COMES FROM
 const populateUser = (query: any) => query.populate({
   path: 'author',
   model: User,
@@ -31,12 +27,10 @@ export async function addImage({ image, userId, path }: AddImageParams) {
     }
 
     const newImage = await Image.create({
-      // WE spread ALL THE img DATA
       ...image,
       author: author._id,
     })
 
-    // ALLOWS US TO SHOW IN OUR CASE, THE NEW IMAGE THAT WAS JUST CREATED AND NOT JUST KEEP WHAT WAS CACHED
     revalidatePath(path);
 
     return JSON.parse(JSON.stringify(newImage));
@@ -88,8 +82,6 @@ export async function getImageById(imageId: string) {
   try {
     await connectToDatabase();
 
-    // SINCE WE DON'T JUST WANT TO GET THE data OF THE IMAGE, WE WANNA GET THE DATA OF THE user WHO CREATED THAT IMAGE AS WELL
-    // WE ARE GETTING WHICH user CREATED IT
     const image = await populateUser(Image.findById(imageId));
 
     if(!image) throw new Error("Image not found");
@@ -126,7 +118,6 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
       .expression(expression)
       .execute();
 
-    // WE GET THE images FROM OUR DB AS WELL
     const resourceIds = resources.map((resource: any) => resource.public_id);
 
     let query = {};
@@ -140,11 +131,9 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
       }
     }
 
-    // IS THE NUMBER OF images WE WANT TO SKIP BC WE ARE ON THE SECOND PAGE FOR EXAMPLE
     const skipAmount = (Number(page) -1) * limit;
 
     const images = await populateUser(Image.find(query))
-      // NEWER images ON TOP FIRST
       .sort({ updatedAt: -1 })
       .skip(skipAmount)
       .limit(limit);
